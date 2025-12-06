@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.swp
+availability.log
+cookies.json
+config.json
