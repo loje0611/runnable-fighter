@@ -8,22 +8,25 @@ import urllib.error
 from playwright.sync_api import sync_playwright
 
 # Configuration
-TARGET_URL = "https://runable.me/product/3299?comp=2955"
+# TARGET_URL is now loaded from config.json
 TEST_URL = "https://runable.me/product/3182?comp=3176"
 COOKIES_FILE = "cookies.json"
 LOG_FILE = "availability.log"
 APPLICANT_NAME = "김건우"
 CONFIG_FILE = "config.json"
 SLACK_WEBHOOK_URL = "" 
+TARGET_URL = "https://runable.me/product/3299?comp=2955" # Default/Fallback
 
 def load_config():
-    global SLACK_WEBHOOK_URL
+    global SLACK_WEBHOOK_URL, TARGET_URL
     try:
         with open(CONFIG_FILE, "r") as f:
             config = json.load(f)
             SLACK_WEBHOOK_URL = config.get("slack_webhook_url", "")
+            if "target_url" in config and config["target_url"]:
+                TARGET_URL = config["target_url"]
     except FileNotFoundError:
-        print(f"Warning: {CONFIG_FILE} not found. Slack alerts will not work.")
+        print(f"Warning: {CONFIG_FILE} not found. Using defaults/mock mode.")
     except Exception as e:
         print(f"Error loading config: {e}")
 
