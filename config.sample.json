@@ -1,0 +1,4 @@
+{
+    "target_url": "https://runable.me/product/XXXX?comp=YYYY",
+    "slack_webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL_HERE"
+}
