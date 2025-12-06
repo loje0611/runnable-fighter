@@ -33,7 +33,12 @@
 
 ### 1. `config.json` 생성
 모니터링할 **대회 URL**과 알림을 받을 **Slack Webhook URL**을 설정합니다.
-폴더 내에 `config.json` 파일을 만들고 아래 내용을 복사해 붙여넣으세요.
+제공된 `config.sample.json` 파일을 복사하여 `config.json`을 만들고 내용을 수정하세요.
+
+```bash
+cp config.sample.json config.json
+vi config.json
+```
 
 ```json
 {
