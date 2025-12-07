@@ -213,7 +213,7 @@ def check_dropdown_availability(page, target_keyword):
         # Interactive Verification: Try to CLICK ANY Category
         # User wants alert if ANY option is selectable.
         
-        target_categories = ["10K", "Half", "Full", "5K", "10Km"]
+        target_categories = ["10K", "10Km"]
         print(f"\n[Interactive Verification] Attempting to CLICK ANY of: {target_categories}")
         
         found_available = None
