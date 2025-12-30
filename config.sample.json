@@ -1,4 +1,13 @@
 {
-    "target_url": "https://runable.me/product/XXXX?comp=YYYY",
-    "slack_webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL_HERE"
+    "target_url": "https://runable.me/product/XXXX?comp=2955",
+    "slack_webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+    "monitoring_interval": 30,
+    "enable_heartbeat": true,
+    "target_categories": [
+        "10K",
+        "10Km"
+    ],
+    "headless": false,
+    "cookies_file": "cookies.json",
+    "log_file": "availability.log"
 }
