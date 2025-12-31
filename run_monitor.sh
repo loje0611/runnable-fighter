@@ -28,8 +28,8 @@ else
 fi
 
 echo "Starting Monitor Script in BACKGROUND..."
-nohup python3 "$SCRIPT" "$@" > monitor_console.log 2>&1 &
+nohup python3 "$SCRIPT" "$@" > /dev/null 2>&1 &
 PID=$!
 echo "Monitor started. PID: $PID"
-echo "Console output is being redirected to 'monitor_console.log'."
+echo "Console output discarded. Logs are in 'availability.log'."
 echo "To stop the monitor, run: kill $PID"

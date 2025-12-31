@@ -5,6 +5,7 @@ import sys
 import logging
 import urllib.request
 import urllib.error
+import datetime
 from typing import List, Dict, Optional, Any
 from playwright.sync_api import sync_playwright, Page
 
@@ -19,6 +20,7 @@ class Config:
     TARGET_URL: Optional[str] = None
     MONITORING_INTERVAL: int = 30
     ENABLE_HEARTBEAT: bool = True
+    HEARTBEAT_INTERVAL_MINUTES: int = 60
     TARGET_CATEGORIES: List[str] = ["10K", "10Km"]
     HEADLESS: bool = False
     COOKIES_FILE: str = "cookies.json"
@@ -33,6 +35,7 @@ class Config:
                 cls.TARGET_URL = data.get("target_url")
                 cls.MONITORING_INTERVAL = data.get("monitoring_interval", 30)
                 cls.ENABLE_HEARTBEAT = data.get("enable_heartbeat", True)
+                cls.HEARTBEAT_INTERVAL_MINUTES = data.get("heartbeat_interval_minutes", 60)
                 cls.TARGET_CATEGORIES = data.get("target_categories", ["10K", "10Km"])
                 cls.HEADLESS = data.get("headless", False)
                 cls.COOKIES_FILE = data.get("cookies_file", "cookies.json")
@@ -202,7 +205,11 @@ def run_monitor(is_test: bool = False) -> None:
             return
 
         last_heartbeat_time = 0.0
-        HEARTBEAT_INTERVAL = 3600 # 1 Hour
+        start_time = time.time()
+        check_count = 0
+        
+        # Convert minutes to seconds
+        HEARTBEAT_INTERVAL = Config.HEARTBEAT_INTERVAL_MINUTES * 60
 
         while True:
             try:
@@ -212,6 +219,7 @@ def run_monitor(is_test: bool = False) -> None:
                 time.sleep(2) 
 
                 status = check_dropdown_availability(page, target_cats)
+                check_count += 1
 
                 if "AVAILABLE" in status:
                     message = f"ALERT: A Course is AVAILABLE! Status: {status}"
@@ -223,7 +231,18 @@ def run_monitor(is_test: bool = False) -> None:
                      # Check Heartbeat
                      current_time = time.time()
                      if Config.ENABLE_HEARTBEAT and (current_time - last_heartbeat_time >= HEARTBEAT_INTERVAL):
-                         msg = f"(Heartbeat) 모니터링 정상 작동 중. 현재 신청 가능한 항목 없음."
+                         # Calc duration
+                         elapsed = current_time - start_time
+                         duration_str = str(datetime.timedelta(seconds=int(elapsed)))
+                         start_time_str = datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S')
+
+                         msg = (
+                             f"(Heartbeat) 모니터링 정상 작동 중.\n"
+                             f"- 시작 시간: {start_time_str}\n" 
+                             f"- 실행 기간: {duration_str}\n"
+                             f"- 체크 횟수: {check_count}회\n"
+                             f"- 현재 신청 가능한 항목 없음."
+                         )
                          logging.info(msg)
                          send_slack_alert(msg)
                          last_heartbeat_time = current_time

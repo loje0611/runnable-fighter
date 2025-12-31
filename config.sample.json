@@ -3,6 +3,7 @@
     "slack_webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
     "monitoring_interval": 30,
     "enable_heartbeat": true,
+    "heartbeat_interval_minutes": 60,
     "target_categories": [
         "10K",
         "10Km"
